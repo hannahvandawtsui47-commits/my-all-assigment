@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Find Distance to KBU</title>
+  <style>
+    body {
+      background: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .card {
+      background: white;
+      padding: 30px 40px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    button {
+      padding: 12px 24px;
+      background: #0066cc;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover { background: #004999; }
+    .info { margin-top: 20px; font-size: 16px; color: #333; }
+    .result { margin-top: 25px; font-size: 20px; font-weight: bold; color: #006600; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Where are you?</h2>
+    <button onclick="findLocation()">📍 Get My Location</button>
+    <div class="info" id="coords"></div>
+    <div class="result" id="distanceResult"></div>
+
+    <!-- Back Button -->
+    <button onclick="window.location.href='index.html'">⬅ Back</button>
+  </div>
+
+  <script>
+    const kbuLat = 13.7265;
+    const kbuLon = 100.7521;
+
+    function findLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        document.getElementById("coords").textContent = "Geolocation is not supported.";
+      }
+    }
+
+    function showPosition(position) {
+      const userLat = position.coords.latitude;
+      const userLon = position.coords.longitude;
+
+      document.getElementById("coords").innerHTML = 
+        `Your Location:<br>Latitude: ${userLat.toFixed(4)}<br>Longitude: ${userLon.toFixed(4)}`;
+
+      const distance = calculateDistance(userLat, userLon, kbuLat, kbuLon);
+      document.getElementById("distanceResult").textContent =
+        `You're ${distance.toFixed(2)} km away from Kasem Bundit University.`;
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = deg2rad(lat2 - lat1);
+      const dLon = deg2rad(lon2 - lon1);
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function deg2rad(deg) { return deg * (Math.PI / 180); }
+
+    function showError(error) {
+      const msg = {
+        1: "Permission denied.",
+        2: "Position unavailable.",
+        3: "Request timed out."
+      };
+      document.getElementById("coords").textContent = msg[error.code] || "An unknown error occurred.";
+    }
+  </script>
+</body>
+</html>

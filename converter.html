@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi Unit Converter</title>
+  <style>
+    body { font-family: Arial; padding: 30px; }
+    .converter { max-width: 400px; margin: auto; }
+    input, select, button { margin-top: 10px; width: 100%; padding: 10px; }
+  </style>
+</head>
+<body>
+  <div class="converter">
+    <h1>Unit Converter</h1>
+    <label for="typeSelect">Choose a conversion type:</label>
+    <select id="typeSelect">
+      <option value="length">Length (Inch → Cm)</option>
+      <option value="height">Height (Feet → Meters)</option>
+      <option value="temperature">Temperature (°C → °F)</option>
+      <option value="area">Area (m² → ft²)</option>
+    </select>
+
+    <label for="inputValue">Enter Value:</label>
+    <input type="number" id="inputValue" required />
+
+    <button onclick="convert()">Submit</button>
+    <p id="output"></p>
+
+    <button onclick="window.location.href='index.html'">Back</button>
+  </div>
+
+  <script>
+    function convert() {
+      const input = document.getElementById("inputValue").value;
+      const type = document.getElementById("typeSelect").value;
+      const output = document.getElementById("output");
+
+      if (input === "" || isNaN(input)) {
+        alert("Please enter a valid number.");
+        return;
+      }
+
+      let result = 0;
+      switch (type) {
+        case "length":
+          result = input * 2.54;
+          output.innerText = input + " inch = " + result.toFixed(2) + " cm";
+          break;
+        case "height":
+          result = input * 0.3048;
+          output.innerText = input + " ft = " + result.toFixed(2) + " m";
+          break;
+        case "temperature":
+          result = (input * 9 / 5) + 32;
+          output.innerText = input + "°C = " + result.toFixed(2) + "°F";
+          break;
+        case "area":
+          result = input * 10.7639;
+          output.innerText = input + " m² = " + result.toFixed(2) + " ft²";
+          break;
+      }
+    }
+  </script>
+</body>
+</html>

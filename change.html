@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculate Change</title>
+  <style>
+    body { font-family: Arial; padding: 30px; text-align: center; }
+    input, button { padding: 10px; width: 200px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Calculate Change</h2>
+  <label for="amount">Enter Amount:</label><br>
+  <input type="number" id="amount" min="1" required><br>
+  <button onclick="calculateChange()">Submit</button>
+  <div id="result"></div>
+
+  <button onclick="window.location.href='index.html'">Back</button>
+
+  <script>
+    function calculateChange() {
+      const amount = parseInt(document.getElementById("amount").value);
+      const result = document.getElementById("result");
+
+      if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid positive amount.");
+        return;
+      }
+
+      const denominations = [100, 50, 20, 10, 5, 1];
+      let remaining = amount;
+      let output = "<h3>Change breakdown:</h3><ul>";
+
+      denominations.forEach(denom => {
+        const count = Math.floor(remaining / denom);
+        if (count > 0) {
+          output += `<li>${denom} × ${count}</li>`;
+          remaining %= denom;
+        }
+      });
+
+      output += "</ul>";
+      result.innerHTML = output;
+    }
+  </script>
+</body>
+</html>
